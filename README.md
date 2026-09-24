@@ -33,6 +33,10 @@ Se puede ejecutar varias veces: los cambios en `~/.bashrc` e `input.lua` van ent
 **`~/.config/hypr/input.lua`**
 - Caps Lock vuelve a funcionar normal; la tecla Compose pasa a Alt derecho.
 
+**`~/.config/herdr/config.toml`**
+- Vuelve a los atajos oficiales de herdr (quita los estilo tmux de Omarchy). El tema y la UI de
+  Omarchy se mantienen, y se guarda un backup `config.toml.bak-keybind-*`.
+
 **Paquetes**
 - Desinstala `omarchy-nvim`, `neovim` y `tmux`.
 - Quita `codex` de mise.
@@ -50,3 +54,55 @@ Se puede ejecutar varias veces: los cambios en `~/.bashrc` e `input.lua` van ent
 | `g` `ga` `gcm` `gp` | `git`, `git add`, `git commit -m`, `git push` |
 | `compress` / `decompress` | `tar.gz` |
 | `ssh` | `ssh` con reconexión automática |
+
+## Atajos de herdr
+
+`prefix` = `ctrl+b`: se pulsa, se suelta y luego la tecla. Workspace = "space", tab = ventana,
+pane = cada división dentro de una tab. `prefix ?` muestra todos los atajos.
+
+**Workspaces**
+
+| Acción | Atajo |
+|---|---|
+| Crear | `prefix` `shift+n` |
+| Cerrar | `prefix` `shift+d` |
+| Renombrar | `prefix` `shift+w` |
+| Cambiar | `prefix` `w` (selector: `↑`/`↓` y `Enter`) |
+
+**Tabs**
+
+| Acción | Atajo |
+|---|---|
+| Crear | `prefix` `c` |
+| Cerrar | `prefix` `shift+x` |
+| Renombrar | `prefix` `shift+t` |
+| Anterior / siguiente | `prefix` `p` / `prefix` `n` |
+| Ir a la tab 1–9 | `prefix` `1`…`9` |
+
+**Panes**
+
+| Acción | Atajo |
+|---|---|
+| Dividir lado a lado | `prefix` `v` |
+| Dividir arriba/abajo | `prefix` `-` |
+| Cerrar | `prefix` `x` |
+| Moverse | `prefix` `h` `j` `k` `l` |
+| Siguiente / anterior | `prefix` `tab` / `prefix` `shift+tab` |
+| Intercambiar posición | `prefix` `shift+h/j/k/l` |
+| Maximizar / restaurar | `prefix` `z` |
+| Cambiar tamaño | `prefix` `r`, flechas, `Esc` |
+| Renombrar | `prefix` `shift+p` |
+
+**Otros**
+
+| Acción | Atajo |
+|---|---|
+| Ver todos los atajos | `prefix` `?` |
+| Salir sin cerrar nada (detach) | `prefix` `q` (se vuelve con `herdr`) |
+| Modo copia | `prefix` `[` |
+| Abrir el historial del pane en el editor | `prefix` `e` |
+| Ir a la última notificación | `prefix` `o` |
+| Mostrar / ocultar barra lateral | `prefix` `b` |
+| Buscador de sesiones | `prefix` `g` |
+| Ajustes | `prefix` `s` |
+| Recargar config | `prefix` `shift+r` |

@@ -72,6 +72,22 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+step "Atajos oficiales de herdr (~/.config/herdr/config.toml)"
+
+HERDR_CONFIG="$HOME/.config/herdr/config.toml"
+
+if ! command -v herdr &>/dev/null; then
+  echo "herdr no está instalado, nada que hacer."
+elif [[ -f $HERDR_CONFIG ]] && grep -qE '^\[\[?keys[].]' "$HERDR_CONFIG"; then
+  # Quita los atajos estilo tmux de Omarchy (deja un backup); el tema y la UI se mantienen
+  herdr config reset-keys
+  herdr server reload-config &>/dev/null || true
+  echo "Listo."
+else
+  echo "Ya usa los atajos oficiales."
+fi
+
+# ---------------------------------------------------------------------------
 step "Desinstalar Neovim y tmux"
 
 to_remove=()
