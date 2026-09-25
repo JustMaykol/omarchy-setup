@@ -88,6 +88,104 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+step "VS Code como editor por defecto"
+
+# Solo se instala si falta: el instalador de Omarchy sobrescribe settings.json de VS Code
+command -v code &>/dev/null || omarchy install editor vscode
+
+# $EDITOR (omarchy-launch-editor) abre el editor elegido aquí
+omarchy default editor code
+
+# git necesita --wait para esperar a que se cierre el archivo del commit
+git config --global core.editor "code --wait"
+
+# Abrir archivos de texto con VS Code desde el explorador de archivos
+xdg-mime default code.desktop \
+  text/plain text/markdown text/x-shellscript application/x-shellscript application/json \
+  application/toml text/x-toml application/yaml text/x-yaml text/x-log text/csv application/xml \
+  text/x-python text/x-csrc text/x-chdr text/css
+echo "Listo."
+
+# ---------------------------------------------------------------------------
+step "Dependencias de los plugins (cava, qt6-multimedia)"
+
+# cava: ecualizador de OmaSpotify. qt6-multimedia: videos en Lock Screen Explorer.
+sudo pacman -S --needed --noconfirm cava qt6-multimedia
+echo "Listo."
+
+# ---------------------------------------------------------------------------
+step "Plugins del shell de Omarchy (~/.config/omarchy/plugins)"
+
+PLUGINS_DIR="$HOME/.config/omarchy/plugins"
+PLUGINS=(
+  https://github.com/stappmus/omarchy-activity-monitor.git   # Activity Monitor
+  https://github.com/SirJul1337/omarchy-lock-explorer.git     # Lock Screen Explorer
+  https://github.com/jeremylanger/omaspotify.git              # OmaSpotify
+  https://github.com/stappmus/Omasing.git                     # Omasing
+  https://github.com/ax1g/quickshell-screentime-plugin.git    # Screen Time
+  https://github.com/elixirblend/omarchy-workspace-apps.git   # Workspace Apps
+)
+
+# El id del plugin sale de su manifest, así que se detecta si ya está instalado por su repo
+plugin_installed() {
+  local url="${1%.git}" dir remote
+  for dir in "$PLUGINS_DIR"/*/; do
+    remote=$(git -C "$dir" remote get-url origin 2>/dev/null) || continue
+    [[ ${remote%.git} == "$url" ]] && return 0
+  done
+  return 1
+}
+
+if ! command -v omarchy &>/dev/null; then
+  echo "omarchy no está instalado, nada que hacer."
+else
+  for url in "${PLUGINS[@]}"; do
+    if plugin_installed "$url"; then
+      echo "Ya instalado: $url"
+    else
+      omarchy plugin add "$url" --enable --yes
+    fi
+  done
+  echo "Listo."
+fi
+
+# ---------------------------------------------------------------------------
+step "Plugins de Omarchy: activar los que uso, desactivar el resto"
+
+PLUGINS_ENABLED=(
+  audio background bar bluetooth clipboard clock dev-gallery disk-speedtest emojis idle
+  image-picker keyboard-layout menu network nightlight notifications polkit power reminders
+  speedtest system-update tray weather wifiqr
+)
+# lock y workspaces los reemplazan Lock Screen Explorer y Workspace Apps
+PLUGINS_DISABLED=(
+  active-window agents battery dropbox indicators lock media microphone monitor osd spacer
+  tailscale workspaces
+)
+
+if ! command -v omarchy &>/dev/null; then
+  echo "omarchy no está instalado, nada que hacer."
+else
+  for id in "${PLUGINS_ENABLED[@]}"; do omarchy plugin enable "omarchy.$id" >/dev/null; done
+  for id in "${PLUGINS_DISABLED[@]}"; do omarchy plugin disable "omarchy.$id" >/dev/null; done
+  omarchy bar position top >/dev/null
+  echo "Listo."
+fi
+
+# ---------------------------------------------------------------------------
+step "Tema Saga"
+
+# Solo se instala (y aplica) la primera vez, para no pisar el tema si luego lo cambio
+if ! command -v omarchy &>/dev/null; then
+  echo "omarchy no está instalado, nada que hacer."
+elif [[ -d $HOME/.config/omarchy/themes/saga ]]; then
+  echo "Ya instalado."
+else
+  omarchy theme install https://github.com/HANCORE-linux/omarchy-saga-theme.git
+  echo "Listo."
+fi
+
+# ---------------------------------------------------------------------------
 step "Desinstalar Neovim y tmux"
 
 to_remove=()
