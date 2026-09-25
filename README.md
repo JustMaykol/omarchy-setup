@@ -74,6 +74,19 @@ It can be run multiple times: changes to `~/.bashrc` and `input.lua` go between 
 - Removes `codex` from mise.
 - Deletes leftover Neovim, tmux and Codex configuration.
 
+## Manual setup afterwards
+
+At the end, the script lists what it can't do on its own:
+
+1. **Brave Origin**: sign in / turn on Brave Sync.
+2. **OmaSpotify**: open the panel, sign in to Spotify in the browser and also complete the playback
+   authorization ("Finish playback setup"). Requires Premium.
+3. **VS Code**: sign in to Settings Sync (GitHub or Microsoft).
+4. **Git**: set `user.name` / `user.email` and add the SSH key to GitHub.
+5. **Claude Code**: run `claude` and sign in with `/login`.
+6. **Lock Screen Explorer**: pick a design. To unlock with a FIDO2 key, enroll it from the Omarchy
+   menu (Setup > Security > Fido2) and run the plugin's `extras/setup-fido2.sh`.
+
 ## Remaining aliases
 
 | Alias | Command |

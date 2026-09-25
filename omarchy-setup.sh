@@ -272,3 +272,17 @@ echo "Listo."
 
 # ---------------------------------------------------------------------------
 printf '\n\033[1;32m✔ Configuración aplicada.\033[0m Abre una terminal nueva o ejecuta: source ~/.bashrc\n'
+
+# Lo que el script no puede hacer: inicios de sesión y ajustes manuales
+printf '\n\033[1;33mFalta configurar a mano:\033[0m\n'
+cat <<'EOF'
+  1. Brave Origin: iniciar sesión / activar Brave Sync.
+  2. OmaSpotify: abrir el panel, iniciar sesión en Spotify en el navegador y completar
+     también la autorización de reproducción ("Finish playback setup"). Requiere Premium.
+  3. VS Code: iniciar sesión en Settings Sync (GitHub o Microsoft).
+  4. Git: git config --global user.name / user.email y agregar la clave SSH a GitHub.
+  5. Claude Code: ejecutar `claude` e iniciar sesión con /login.
+  6. Lock Screen Explorer: elegir un diseño. Para desbloquear con llave FIDO2, registrarla en
+     el menú de Omarchy (Setup > Security > Fido2) y ejecutar:
+     bash ~/.config/omarchy/plugins/io.github.sirjul1337.lock-explorer/extras/setup-fido2.sh
+EOF
