@@ -183,10 +183,53 @@ fi
 # ---------------------------------------------------------------------------
 step "Tema Saga"
 
+# Hook: con Saga, VS Code usa el tema del repo de Saga en vez del que genera Omarchy
+SAGA_HOOK="$HOME/.config/omarchy/hooks/theme-set.d/vscode-saga"
+mkdir -p "$(dirname "$SAGA_HOOK")"
+cat >"$SAGA_HOOK" <<'HOOK'
+#!/bin/bash
+# Con el tema Saga, usar en VS Code el tema del repo de Saga en vez del que genera Omarchy.
+# Omarchy ignora el tema de VS Code de los temas instalados desde git.
+
+[[ $1 == saga ]] || exit 0
+command -v code &>/dev/null || exit 0
+
+src="$HOME/.config/omarchy/themes/saga/vscode-extension"
+ext_base="$HOME/.vscode/extensions"
+ext_dir="$ext_base/local.theme-saga-1.0.0"
+settings="$HOME/.config/Code/User/settings.json"
+[[ -d $src && -f $settings ]] || exit 0
+
+# Instalar la extensión como local (VS Code solo carga temas desde extensiones)
+mkdir -p "$ext_dir"
+cp -r "$src/." "$ext_dir/"
+
+extensions_file="$ext_base/extensions.json"
+[[ -f $extensions_file ]] || printf '[]\n' >"$extensions_file"
+tmp=$(mktemp)
+if jq --arg path "$ext_dir" --arg rel "$(basename "$ext_dir")" '
+  map(select(.identifier.id != "local.theme-saga")) + [{
+    identifier: { id: "local.theme-saga" },
+    version: "1.0.0",
+    location: { "$mid": 1, fsPath: $path, external: ("file://" + $path), path: $path, scheme: "file" },
+    relativeLocation: $rel
+  }]' "$extensions_file" >"$tmp"; then
+  mv "$tmp" "$extensions_file"
+else
+  rm -f "$tmp"
+fi
+
+sed -i --follow-symlinks -E \
+  's|("workbench.colorTheme"[[:space:]]*:[[:space:]]*")[^"]*(")|\1Saga\2|' "$settings"
+HOOK
+chmod +x "$SAGA_HOOK"
+
 # Solo se instala (y aplica) la primera vez, para no pisar el tema si luego lo cambio
 if ! command -v omarchy &>/dev/null; then
   echo "omarchy no está instalado, nada que hacer."
 elif [[ -d $HOME/.config/omarchy/themes/saga ]]; then
+  # Si Saga ya es el tema actual, aplicar el hook ahora
+  [[ $(omarchy theme current) == Saga ]] && "$SAGA_HOOK" saga
   echo "Ya instalado."
 else
   omarchy theme install https://github.com/HANCORE-linux/omarchy-saga-theme.git

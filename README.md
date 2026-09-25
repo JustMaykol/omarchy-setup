@@ -66,6 +66,8 @@ It can be run multiple times: changes to `~/.bashrc` and `input.lua` go between 
 **Theme**
 - Installs and applies the [Saga](https://github.com/HANCORE-linux/omarchy-saga-theme) theme (only the
   first time, so a theme chosen later isn't overwritten).
+- Adds a `theme-set` hook (`~/.config/omarchy/hooks/theme-set.d/vscode-saga`) so that, whenever Saga
+  is applied, VS Code uses the theme bundled in the Saga repo instead of the one Omarchy generates.
 
 **Packages**
 - Uninstalls `omarchy-nvim`, `neovim` and `tmux`.
