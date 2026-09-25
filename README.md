@@ -42,6 +42,9 @@ It can be run multiple times: changes to `~/.bashrc` and `input.lua` go between 
   `$EDITOR` (so `eff` opens files in VS Code), git's `core.editor` (`code --wait`), and the file
   manager's handler for text, Markdown, scripts, JSON, YAML, TOML and similar files.
 
+**Default browser**
+- Installs Brave Origin (if missing) and sets it as the default browser.
+
 **Omarchy shell plugins** (`~/.config/omarchy/plugins`)
 - Installs `cava` (OmaSpotify's equalizer) and `qt6-multimedia` (video designs in Lock Screen Explorer).
 - Installs and enables (skips the ones already installed):

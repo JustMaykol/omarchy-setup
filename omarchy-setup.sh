@@ -107,6 +107,14 @@ xdg-mime default code.desktop \
 echo "Listo."
 
 # ---------------------------------------------------------------------------
+step "Brave Origin como navegador por defecto"
+
+# Solo se instala si falta: el instalador de Omarchy sobrescribe brave-origin-flags.conf
+command -v brave-origin &>/dev/null || omarchy install browser brave-origin
+omarchy default browser brave-origin
+echo "Listo."
+
+# ---------------------------------------------------------------------------
 step "Dependencias de los plugins (cava, qt6-multimedia)"
 
 # cava: ecualizador de OmaSpotify. qt6-multimedia: videos en Lock Screen Explorer.
